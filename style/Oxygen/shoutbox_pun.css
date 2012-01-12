@@ -1,0 +1,28 @@
+
+  /* Belows is the CSS file with some comments, edit it to your likings. */
+
+  /* This is to "trap" all shoutbox message into one content box */
+  div.sbox {
+ 
+	position:relative;	/* On older OS versions "position" and "z-index" must be defined (absolute | relative), */
+	z-index:1;			/* it seems that recent webkit is less picky and works anyway. */
+ 
+	overflow:auto;
+
+    background: white;
+    padding: 2px;
+    width: 99%;
+    height: 180px;
+    border: 1px solid #ddd;
+    color: #000000;
+    text-align: left;
+    FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif }
+
+   input.sbox {
+    padding: 2px;
+    margin: 2px;
+    border: 1px solid #ddd;
+    background-color: white;
+    color: #000000;
+    }
+ }
