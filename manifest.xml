@@ -4,8 +4,8 @@
 <!--
 ***********************************************************************
 
-    PunBB 1.3 Extension - online_plus
-    Copyright (C) 2009  YonasH (www.yonash.pl)
+    PunBB 1.4 Extension - shoutbox_pun
+    Copyright (C) 2012 Andrew Smith
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -26,12 +26,12 @@
 <extension engine="1.0">
 	<id>shoutbox_pun</id>
 	<title>PunBB Shoutbox</title>
-	<version>0.2.25</version>
+	<version>7.0.7</version>
 	<description>Puts a shoutbox underneath the forum</description>
-	<author>Pandog</author>
+	<author>andrewmichaelsmith</author>
 
-	<minversion>1.3.4</minversion>
-	<maxtestedon>1.4.5</maxtestedon>
+	<minversion>1.4.0</minversion>
+	<maxtestedon>1.4.1</maxtestedon>
 	
 	<install><![CDATA[
 	
@@ -89,94 +89,14 @@ if (defined('FORUM_PAGE') && FORUM_PAGE == 'index')
 		
 		<hook id="in_info_output_start"><![CDATA[
 		?>
-<script type="text/javascript" src="/extensions/shoutbox_pun/jquery.js"></script>
-<script language="javascript">
+<script src="<?=$ext_info['path']?>/js/jquery-1.7.1.min.js"></script>
+<script src="<?=$ext_info['path']?>/js/jquery.endless-scroll.js"></script>
+<script src="<?=$ext_info['path']?>/js/shoutbox-pun.js"></script>
 
-  var t;
-  waitTime = 2000;
-  lastid = 0;  
-  
-  $("#loading").hide();
-  
-    $(document).ready(function(){ 
-       
-		
-		$("form#shoutform").submit(function(){  
-
-				
-				 $("#loading").fadeIn();
-				 			 
-				 $.get("/extensions/shoutbox_pun/data.php",{  add: $("#shout").val(), id: lastid }, function(xml)
-				 {
-				 });
-				 $("#shout").attr("value","");
-			     
-				 
-				 
-				 return false;   
-		 });
-		 
-		 updateShoutbox();
-		 
-		 
-   });   
-
- 
-   function addMessages(xml) {
-   
-		   
-		  
-		   if($("newones",xml).text() == "0") {
-				t = setTimeout("updateShoutbox()", waitTime);   
-				return;
-				}
-
-			lastid = $("lastid",xml).text(); 				
-		 
-			$("message",xml).each(function(id) {   
-			   message = $("message",xml).get(id); 
-			   var d = new Date(parseInt($("date",message).text())*1000);
-			   
-			   var hour = d.getHours();
-			   if(hour < 10) hour = "0" + hour;
-			   
-			   var min = d.getMinutes();
-			   if(min < 10)  min = "0" + min;
-				
-				
-			   $("#shoutbox").prepend(
-							
-							"<li><b title=\""+
-							d.toDateString()
-							+"\">["+
-							hour
-							+":"+
-							min
-							+"]</b> <b>"
-							+$("username",message).text()+   
-							 "</b>: "+$("text",message).text()+   
-							 "</li>");
-			 });
-			 $("#loading").fadeOut();
-			}
-			 
-   
-		function updateShoutbox() {   
-    
-		$.get("/extensions/shoutbox_pun/data.php",{ m: "list", id: lastid }, function add(xml) {
-		addMessages(xml)
-
-		});   
-
-     
-   }
-   
-
-</script>
 
 <form id="shoutform">
 		<input type="text" class="sbox" id="shout" color="white" size="100" maxlength="250">
-		<img src="/extensions/shoutbox_pun/loading.gif" alt="Loading..." id="loading" width="16" height="16"/>
+		<img src="<?=$ext_info['path']?>/loading.gif" alt="Loading..." id="loading" width="16" height="16"/>
 		<span id="error"></span>
     <div class="sbox" id="sbox">
     <div id="shoutbox">

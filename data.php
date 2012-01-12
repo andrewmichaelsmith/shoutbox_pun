@@ -1,4 +1,12 @@
 <?php
+/*
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ */
 ob_start("ob_gzhandler");
 
 function xmlEntities($str) 
@@ -15,12 +23,13 @@ define('FORUM_ROOT', '../../');
 require FORUM_ROOT.'include/common.php';
 
 
-function getShouts($id,$forum_db) {
+function getShouts($id,$forum_db,$xml) {
   
   
     echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
 	  echo "<response>\n";   
-
+	echo $xml;
+	
     $query = array(
 		'SELECT'	=> 'id, userid, date, shout',
 		'FROM'		=> 'pun_shout',
@@ -110,15 +119,8 @@ if($forum_user['id']==1)
 	  echo "</response>";
 	  exit();
 }
-  
-//This is the script that adds entries to the shoutbox, deletes them, edits them and lists entries in the shoutbox
-
-
-
 else if($_GET['add'])
 {
-	echo "<?xml version=\"1.0\"?>\n";
-	echo "<response>\n";  
 	
 	
 	$msg_to_add = make_clickable($_GET['add']);
@@ -137,26 +139,28 @@ else if($_GET['add'])
 		$forum_db->query_build($query) or error(__FILE__, __LINE__);
 		
 		//getShouts($_GET['id'],$forum_db);
-		 echo "\t<iserror>";  
-	  echo "0";
-	  echo "</iserror>\n";
+		getShouts($_GET['id'],$forum_db,"<iserror>0</iserror>");
+
 	}
 	else
 	{
 	  
+	  echo "<?xml version=\"1.0\"?>\n";
+	  echo "<response>\n";
 	  echo "\t<iserror>";  
 	  echo "1";
 	  echo "</iserror>\n";
 	  echo "\t<error>";
 	  echo "Too long or Too Short";
 	  echo "</error>";
-	
+	  echo "</response>";
 	  
 	}
 	
-	  echo "</response>";
+	  
 }
 
+/* Not implemented yet
 else if($_GET['del'])
 {
   $msg_to_delete = round($_GET['del']);
@@ -171,23 +175,22 @@ else if($_GET['del'])
          
   }
   else
-	{
-	  echo "<?xml version=\"1.0\"?>\n";
-	  echo "<response>\n";  
-	  echo "\t<error>";  
-	  echo "you suck";
-	  echo "</error>\n";
-	  echo "</response>";
-	  
-	}
+  {
+	
+		print_error();
+   }
   
-}
+}*/
 
 else if($_GET['m']=="list")
 {
-  getShouts($_GET['id'],$forum_db);
+  getShouts($_GET['id'],$forum_db,"");
 }
 
+else
+{
+	print_error(); 	
+}
 function _make_url_clickable_cb($matches) {
 	$ret = '';
 	$url = $matches[2];
@@ -201,6 +204,7 @@ function _make_url_clickable_cb($matches) {
 	}
 	return $matches[1] . "<a href=\"".htmlspecialchars($url)."\" rel=\"nofollow\">".htmlspecialchars($url)."</a>" . $ret;
 }
+
  
 function _make_web_ftp_clickable_cb($matches) {
 	$ret = '';
@@ -235,4 +239,13 @@ function make_clickable($ret) {
 	return $ret;
 }
 
+function print_error()
+{
+	echo "<?xml version=\"1.0\"?>\n";
+	echo "<response>\n";
+	echo "\t<error>";
+	echo "I don't understand";
+	echo "</error>\n";
+	echo "</response>";
+}
 ?>
