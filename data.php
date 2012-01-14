@@ -35,7 +35,7 @@ function getShouts($id,$forum_db,$xml) {
 		'FROM'		=> 'pun_shout',
 		'ORDER BY'	=> 'date DESC',
 		'WHERE'   => 'id > '.round($id),
-		'LIMIT'		=> '50'
+		'LIMIT'		=> '75'
 		
 	  );
 	  

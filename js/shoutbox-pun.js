@@ -1,6 +1,9 @@
 var timeout;
 var waitTime = 1600;
 var lastid = 0;
+var done = false;
+var myScroll;
+var mobile = isMobile();
 
 
 $("#loading").hide();
@@ -29,12 +32,24 @@ function addMessages(xml) {
 	
 	        "<li><b title=\"" + d.toDateString() + "\">[" + hour + ":" + min + "]</b> <b>" + $("username", message).text() + "</b>: " + $("text", message).text() + "</li>");
 	    });
+	    
+	    if(mobile)
+	    {
+	    	myScroll.refresh();
+	    }
     }
     
     $("#loading").fadeOut();
-    
+
+
+    if(mobile && !done)
+    {
+    	myScroll = new iScroll('sbox');
+    	done = true;
+    }
     clearTimeout(timeout);
     timeout = setTimeout("updateShoutbox()", waitTime);
+    
 }
 
 
@@ -51,7 +66,23 @@ function updateShoutbox() {
 
 }
 
-
+function isMobile()
+{
+	if( navigator.userAgent.match(/Android/i) ||
+			 navigator.userAgent.match(/webOS/i) ||
+			 navigator.userAgent.match(/iPhone/i) ||
+			 navigator.userAgent.match(/iPod/i) ||
+			 navigator.userAgent.match(/BlackBerry/)
+			 ){
+	
+		return true;
+	
+	}
+	else
+		{
+		return false;
+		}
+	}
 $(document).ready(function () {
 
 	
@@ -63,14 +94,17 @@ $(document).ready(function () {
         
         clearTimeout(timeout);
 
+        var sht =  $("#shout").val();
+        $("#shout").attr("value", "");
         $.get("/extensions/shoutbox_pun/data.php", {
-            add: $("#shout").val(),
+            add:sht,
             id: lastid
         }, function (xml) {
         	
         	addMessages(xml);
         });
-        $("#shout").attr("value", "");
+        
+      
 
 
 
