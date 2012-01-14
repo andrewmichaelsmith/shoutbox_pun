@@ -81,7 +81,8 @@ function addPage(pageNo)
 	 $.get("extensions/shoutbox_pun/data.php", {
 	        m: "list",
 	        id: 0,
-	        page: pageNo
+	        page: pageNo,
+	        csrf_token: $('input[name="csrf_token"]').val()
 	        
 	    }, function(xml)
 	    {
@@ -97,7 +98,8 @@ function updateShoutbox()
 
     $.get("extensions/shoutbox_pun/data.php", {
         m: "list",
-        id: lastid
+        id: lastid,
+        csrf_token: $('input[name="csrf_token"]').val()
     }, function(xml)
     {
 
@@ -139,7 +141,8 @@ $(document).ready(function() {
         $("#shout").attr("value", "");
         $.get("/extensions/shoutbox_pun/data.php", {
             add: sht,
-            id: lastid
+            id: lastid,
+            csrf_token: $('input[name="csrf_token"]').val()
         }, function(xml) {
 
             addMessages(xml,false);

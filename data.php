@@ -23,8 +23,13 @@ if($forum_user['id']==1)
 {
       print_error("You are not logged in");
 }
+else if($_GET['csrf_token'] != generate_form_token('./extensions/shoutbox_pun/data.php'))
+{
+	print_error("Invalid CSRF Token");
+}
 else if($_GET['add'])
 {
+	
 	
 	
 	$msg_to_add = make_clickable($_GET['add']);
@@ -185,6 +190,7 @@ function getShouts($id,$forum_db,$xml,$page) {
 		echo "\t</message>\n";
 	}
 	 
+	echo "<blah>".$ext_info['path']."</blah>";
 	echo "</response>";
 
 }
