@@ -18,92 +18,85 @@
 -->
 
 <extension engine="1.0">
-	<id>shoutbox_pun</id>
-	<title>PunBB Shoutbox</title>
-	<version>7.1.4</version>
-	<description>Puts a shoutbox underneath the forum</description>
-	<author>andrewmichaelsmith</author>
+    <id>shoutbox_pun</id>
+    <title>PunBB Shoutbox</title>
+    <version>7.1.5</version>
+    <description>Puts a shoutbox underneath the forum</description>
+    <author>andrewmichaelsmith</author>
 
-	<minversion>1.4.0</minversion>
-	<maxtestedon>1.4.1</maxtestedon>
-	
-	<dependencies>
-    	<dependency>jquery</dependency>
-  	</dependencies>
+    <minversion>1.4.0</minversion>
+    <maxtestedon>1.4.1</maxtestedon>
+    
+    <dependencies>
+        <dependency>pun_jquery</dependency>
+    </dependencies>
   
-	<install><![CDATA[
-	
-	if (!$forum_db->table_exists('shoutbox_pun'))
-  {
-  $schema = array(
-		'FIELDS'			=> array(
-  			'id'				=> array(
-  				'datatype'		=> 'SERIAL',
-  				'allow_null'	=> false
-  			),
-  			'userid'			=> array(
-  				'datatype'		=> 'INT(10) UNSIGNED',
-  				'allow_null'	=> false,
-  				'default'		=> '0'
-  			),
-  			'date'			=> array(
-  				'datatype'		=> 'INT(20) UNSIGNED',
-  				'allow_null'	=> false,
-  				'default'		=> '0'
-  			),
-  			'shout'			=> array(
-  				'datatype'		=> 'VARCHAR(255)',
-  				'allow_null'	=> false,
-  				'default'		=> '\'\''
-  			)
-  		),
-  		
-  			'PRIMARY KEY'	=> array('id')
-  	);
-  			
-  $forum_db->create_table('shoutbox_pun', $schema);
- }	
-	
-	]]></install>
-	
-	<uninstall><![CDATA[
+    <install><![CDATA[
+        if (!$forum_db->table_exists('shoutbox_pun')) {
+            $schema = array(
+                'FIELDS'            => array(
+                    'id'                => array(
+                        'datatype'      => 'SERIAL',
+                        'allow_null'    => false
+                    ),
+                    'userid'            => array(
+                        'datatype'      => 'INT(10) UNSIGNED',
+                        'allow_null'    => false,
+                        'default'       => '0'
+                    ),
+                    'date'          => array(
+                        'datatype'      => 'INT(20) UNSIGNED',
+                        'allow_null'    => false,
+                        'default'       => '0'
+                    ),
+                    'shout'         => array(
+                        'datatype'      => 'VARCHAR(255)',
+                        'allow_null'    => false,
+                        'default'       => '\'\''
+                    )
+                ),
+                
+                    'PRIMARY KEY'   => array('id')
+            );
+                    
+            $forum_db->create_table('shoutbox_pun', $schema);
+        }  
+    ]]></install>
+    
+    <uninstall><![CDATA[
+        $forum_db->drop_table('shoutbox_pun');
+    ]]></uninstall>
 
-$forum_db->drop_table('shoutbox_pun');
+    
+    <hooks>
+        <hook id="hd_head"><![CDATA[
+            if (defined('FORUM_PAGE') && FORUM_PAGE == 'index')
+            {
 
-	]]></uninstall>
-
-	
-	<hooks>
-		
-			<hook id="hd_head"><![CDATA[
-if (defined('FORUM_PAGE') && FORUM_PAGE == 'index')
-{
-
-	$forum_loader->add_js($ext_info['path'] . '/js/iscroll.js',array('type' => 'url', 'weight' => 100));
-	$forum_loader->add_js($ext_info['path'] . '/js/jquery.endless-scroll.js',array('type' => 'url', 'weight' => 100));
-	$forum_loader->add_js($ext_info['path'] . '/js/shoutbox-pun.js',array('type' => 'url', 'weight' => 200));
-	
-	if (file_exists($ext_info['path'].'/style/'.$forum_user['style'].'/'.$ext_info['id'].'.css'))
-		$forum_loader->add_css($ext_info['url'].'/style/'.$forum_user['style'].'/'.$ext_info['id'].'.css',array('type' => 'url'));
-	else
-		$forum_loader->add_css($ext_info['url'].'/style/Oxygen/'.$ext_info['id'].'.css',array('type' => 'url'));
-}
-		]]></hook>
-		
-		<hook id="in_info_output_start"><![CDATA[
+                $forum_loader->add_js($ext_info['url'] . '/js/iscroll.js');
+                $forum_loader->add_js($ext_info['url'] . '/js/jquery.endless-scroll.js'));
+                $forum_loader->add_js($ext_info['url'] . '/js/shoutbox-pun.js');
+                
+                if ($forum_user['style'] != 'Oxygen' && file_exists($ext_info['path'].'/style/'.$forum_user['style'].'/'.$ext_info['id'].'.css'))
+                    $forum_loader->add_css($ext_info['url'].'/style/'.$forum_user['style'].'/'.$ext_info['id'].'.css',array('type' => 'url'));
+                else
+                    $forum_loader->add_css($ext_info['url'].'/style/Oxygen/'.$ext_info['id'].'.css',array('type' => 'url'));
+            }
+        ]]></hook>
+        
+        <hook id="in_info_output_start"><![CDATA[
 ?>
 <form id="shoutform">
-		<input type="text" class="sbox" id="shout" color="white" size="100" maxlength="250">
-		<input type="hidden" name="csrf_token" value="<?=generate_form_token($ext_info['path'].'/data.php')?>" />
-		
-		<img src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwoKCggAAAAAAAAAAAAAAACH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADGwi6MjRiSenIm9hqPOvljAOBZGmeaKqubOu6CQAh+QQJCgAAACwAAAAAEAAQAAADHAi63A5ikCEek2TalftWmPZFU/WdaKqubOu+bwIAIfkECQoAAAAsAAAAABAAEAAAAxwIutz+UIlBhoiKkorB/p3GYVN1dWiqrmzrvmkCACH5BAkKAAAALAAAAAAQABAAAAMbCLrc/jDKycQgQ8xL8OzgBg6ThWlUqq5s604JACH5BAkKAAAALAAAAAAQABAAAAMbCLrc/jDKSautYpAhpibbBI7eOEzZ1l1s6yoJACH5BAkKAAAALAAAAAAQABAAAAMaCLrc/jDKSau9OOspBhnC5BHfRJ7iOXAe2CQAIfkECQoAAAAsAAAAABAAEAAAAxoIutz+MMpJ6xSDDDEz0dMnduJwZZulrmzbJAAh+QQJCgAAACwAAAAAEAAQAAADGwi63P4wRjHIEBJUYjP/2dZJlIVlaKqubOuyCQAh+QQJCgAAACwAAAAAEAAQAAADHAi63A5ikCEek2TalftWmPZFU/WdaKqubOu+bwIAOwAAAAAAAAAAAA%3D%3D" alt="Loading..." id="loading" width="16" height="16"/>
-		<span id="error"></span>
+    <input type="text" class="sbox" id="shout" color="white" size="100" maxlength="250">
+    <input type="hidden" name="csrf_token" value="<?=generate_form_token($ext_info['path'].'/data.php')?>" />
+    
+    <img src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwoKCggAAAAAAAAAAAAAAACH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADGwi6MjRiSenIm9hqPOvljAOBZGmeaKqubOu6CQAh+QQJCgAAACwAAAAAEAAQAAADHAi63A5ikCEek2TalftWmPZFU/WdaKqubOu+bwIAIfkECQoAAAAsAAAAABAAEAAAAxwIutz+UIlBhoiKkorB/p3GYVN1dWiqrmzrvmkCACH5BAkKAAAALAAAAAAQABAAAAMbCLrc/jDKycQgQ8xL8OzgBg6ThWlUqq5s604JACH5BAkKAAAALAAAAAAQABAAAAMbCLrc/jDKSautYpAhpibbBI7eOEzZ1l1s6yoJACH5BAkKAAAALAAAAAAQABAAAAMaCLrc/jDKSau9OOspBhnC5BHfRJ7iOXAe2CQAIfkECQoAAAAsAAAAABAAEAAAAxoIutz+MMpJ6xSDDDEz0dMnduJwZZulrmzbJAAh+QQJCgAAACwAAAAAEAAQAAADGwi63P4wRjHIEBJUYjP/2dZJlIVlaKqubOuyCQAh+QQJCgAAACwAAAAAEAAQAAADHAi63A5ikCEek2TalftWmPZFU/WdaKqubOu+bwIAOwAAAAAAAAAAAA%3D%3D" alt="Loading..." id="loading" width="16" height="16"/>
+    <span id="error"></span>
     <div class="sbox" id="sbox">
-    <div id="shoutbox">
-    </div>
+        <div id="shoutbox"></div>
     </div>
 </form>
-		<?php
-		]]></hook>
-			</hooks>
+<?php
+        ]]></hook>
+    </hooks>
 </extension>
