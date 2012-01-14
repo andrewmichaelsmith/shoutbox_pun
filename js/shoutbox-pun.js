@@ -103,10 +103,6 @@ $(document).ready(function () {
         	
         	addMessages(xml);
         });
-        
-      
-
-
 
         return false;
     });

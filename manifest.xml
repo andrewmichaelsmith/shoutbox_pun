@@ -26,7 +26,7 @@
 <extension engine="1.0">
 	<id>shoutbox_pun</id>
 	<title>PunBB Shoutbox</title>
-	<version>7.0.7</version>
+	<version>7.0.9</version>
 	<description>Puts a shoutbox underneath the forum</description>
 	<author>andrewmichaelsmith</author>
 
@@ -90,7 +90,7 @@ if (defined('FORUM_PAGE') && FORUM_PAGE == 'index')
 		<hook id="in_info_output_start"><![CDATA[
 		?>
 <script src="<?=$ext_info['path']?>/js/jquery-1.7.1.min.js"></script>
-<script src="<?=$ext_info['path']?>/js/jquery.endless-scroll.js"></script>
+<script src="<?=$ext_info['path']?>/js/iscroll.js"></script>
 <script src="<?=$ext_info['path']?>/js/shoutbox-pun.js"></script>
 
 
@@ -100,7 +100,6 @@ if (defined('FORUM_PAGE') && FORUM_PAGE == 'index')
 		<span id="error"></span>
     <div class="sbox" id="sbox">
     <div id="shoutbox">
-     I wish I was faster too
     </div>
     </div>
 </form>

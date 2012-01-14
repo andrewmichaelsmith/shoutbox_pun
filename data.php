@@ -111,13 +111,7 @@ echo "</response>";
 
 if($forum_user['id']==1) 
 {
-      echo "<?xml version=\"1.0\"?>\n";
-	  echo "<response>\n"; 
-	  echo "\t<error>\n";
-	  echo "\t\tYou are not logged in\n";
-	  echo "\t</error>\n";
-	  echo "</response>";
-	  exit();
+      print_error("You are not logged in");
 }
 else if($_GET['add'])
 {
@@ -133,63 +127,30 @@ else if($_GET['add'])
     $query = array(
 			'INSERT'	=> 'userid, date, shout',
 			'INTO'		=> 'pun_shout',
-			'VALUES'	=> '\''.$forum_user['id'].'\', \''.time().'\' , \''.mysql_escape_string($msg_to_add).'\''
+			'VALUES'	=> '\''.$forum_user['id'].'\', \''.time().'\' , \''.$forum_db->escape($msg_to_add).'\''
 		);
 		
 		$forum_db->query_build($query) or error(__FILE__, __LINE__);
 		
-		//getShouts($_GET['id'],$forum_db);
 		getShouts($_GET['id'],$forum_db,"<iserror>0</iserror>");
 
 	}
 	else
 	{
 	  
-	  echo "<?xml version=\"1.0\"?>\n";
-	  echo "<response>\n";
-	  echo "\t<iserror>";  
-	  echo "1";
-	  echo "</iserror>\n";
-	  echo "\t<error>";
-	  echo "Too long or Too Short";
-	  echo "</error>";
-	  echo "</response>";
+	  print_error("Message must be greater than 0 characters and shorter than 255 characters");
 	  
 	}
 	
 	  
 }
-
-/* Not implemented yet
-else if($_GET['del'])
-{
-  $msg_to_delete = round($_GET['del']);
-  
-  if($msg_to_delete >= 0)
-  {
-       $query = array(
-        		'DELETE'	=> 'pun_shout',
-        		'WHERE'	=> 'id = '.$msg_to_delete.' AND userid = '.$forum_user['id']
-        	  );  
-         $forum_db->query_build($query) or error(__FILE__, __LINE__);
-         
-  }
-  else
-  {
-	
-		print_error();
-   }
-  
-}*/
-
 else if($_GET['m']=="list")
 {
   getShouts($_GET['id'],$forum_db,"");
 }
-
 else
 {
-	print_error(); 	
+	print_error("You didn't tell me what to do"); 	
 }
 function _make_url_clickable_cb($matches) {
 	$ret = '';
@@ -239,13 +200,18 @@ function make_clickable($ret) {
 	return $ret;
 }
 
-function print_error()
+function print_error($message)
 {
 	echo "<?xml version=\"1.0\"?>\n";
 	echo "<response>\n";
+	echo "\t<iserror>";
+	echo "1";
+	echo "</iserror>\n";
 	echo "\t<error>";
-	echo "I don't understand";
+	echo $message;
 	echo "</error>\n";
 	echo "</response>";
+	
+	exit();
 }
 ?>
