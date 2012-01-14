@@ -20,13 +20,17 @@
 <extension engine="1.0">
 	<id>shoutbox_pun</id>
 	<title>PunBB Shoutbox</title>
-	<version>7.1.0</version>
+	<version>7.1.4</version>
 	<description>Puts a shoutbox underneath the forum</description>
 	<author>andrewmichaelsmith</author>
 
 	<minversion>1.4.0</minversion>
 	<maxtestedon>1.4.1</maxtestedon>
 	
+	<dependencies>
+    	<dependency>jquery</dependency>
+  	</dependencies>
+  
 	<install><![CDATA[
 	
 	if (!$forum_db->table_exists('shoutbox_pun'))
@@ -74,20 +78,20 @@ $forum_db->drop_table('shoutbox_pun');
 			<hook id="hd_head"><![CDATA[
 if (defined('FORUM_PAGE') && FORUM_PAGE == 'index')
 {
+
+	$forum_loader->add_js($ext_info['path'] . '/js/iscroll.js',array('type' => 'url', 'weight' => 100));
+	$forum_loader->add_js($ext_info['path'] . '/js/jquery.endless-scroll.js',array('type' => 'url', 'weight' => 100));
+	$forum_loader->add_js($ext_info['path'] . '/js/shoutbox-pun.js',array('type' => 'url', 'weight' => 200));
+	
 	if (file_exists($ext_info['path'].'/style/'.$forum_user['style'].'/'.$ext_info['id'].'.css'))
-		$forum_head['style_online_plus'] = '<link rel="stylesheet" type="text/css" media="screen" href="'.$ext_info['url'].'/style/'.$forum_user['style'].'/'.$ext_info['id'].'.css" />';
+		$forum_loader->add_css($ext_info['url'].'/style/'.$forum_user['style'].'/'.$ext_info['id'].'.css',array('type' => 'url'));
 	else
-		$forum_head['style_online_plus'] = '<link rel="stylesheet" type="text/css" media="screen" href="'.$ext_info['url'].'/style/Oxygen/'.$ext_info['id'].'.css" />';
+		$forum_loader->add_css($ext_info['url'].'/style/Oxygen/'.$ext_info['id'].'.css',array('type' => 'url'));
 }
 		]]></hook>
 		
 		<hook id="in_info_output_start"><![CDATA[
-		?>
-<script src="<?=$ext_info['path']?>/js/jquery-1.7.1.min.js"></script>
-<script src="<?=$ext_info['path']?>/js/iscroll.js"></script>
-<script src="<?=$ext_info['path']?>/js/jquery.endless-scroll.js"></script>
-<script src="<?=$ext_info['path']?>/js/shoutbox-pun.js"></script>
-
+?>
 <form id="shoutform">
 		<input type="text" class="sbox" id="shout" color="white" size="100" maxlength="250">
 		<input type="hidden" name="csrf_token" value="<?=generate_form_token($ext_info['path'].'/data.php')?>" />
