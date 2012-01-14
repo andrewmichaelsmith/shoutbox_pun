@@ -50,7 +50,7 @@ function addMessages(xml) {
 
 function updateShoutbox() {
 
-    $.get("/extensions/shoutbox_pun/data.php", {
+    $.get("extensions/shoutbox_pun/data.php", {
         m: "list",
         id: lastid
     }, function(xml) {
