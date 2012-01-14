@@ -52,7 +52,7 @@ else if($_GET['add'])
   {	
     $query = array(
 			'INSERT'	=> 'userid, date, shout',
-			'INTO'		=> 'pun_shout',
+			'INTO'		=> 'shoutbox_pun',
 			'VALUES'	=> '\''.$forum_user['id'].'\', \''.time().'\' , \''.$forum_db->escape($msg_to_add).'\''
 		);
 		
@@ -128,7 +128,7 @@ function getShouts($id,$forum_db,$xml,$page) {
 	
 	$query = array(
 		'SELECT'	=> 'id, userid, date, shout',
-		'FROM'		=> 'pun_shout',
+		'FROM'		=> 'shoutbox_pun',
 		'ORDER BY'	=> 'date DESC',
 		'WHERE'     => 'id > '.round($id),
 		'LIMIT'		=>  $page*$pageSize .','. $pageSize,
