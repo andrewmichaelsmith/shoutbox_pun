@@ -4,31 +4,57 @@ var lastid = 0;
 var done = false;
 var myScroll;
 var mobile = isMobile();
+var counter = 0;
 
 
 $("#loading").hide();
 
 
-function addMessages(xml) {
+function getHTMLFromMessage(message)
+{
+	 var d = new Date(parseInt($("date", message).text()) * 1000);
+
+     var hour = d.getHours();
+     if (hour < 10) hour = "0" + hour;
+
+     var min = d.getMinutes();
+     if (min < 10) min = "0" + min;
+
+     return "<li><b title=\"" + d.toDateString() + "\">[" + hour + ":" + min + "]</b> <b>" + $("username", message).text() + "</b>: " + $("text", message).text() + "</li>";
+     
+}
+
+function addMessages(xml,append)
+{
 
     if ($("newones", xml).text() !== "0") {
         lastid = $("lastid", xml).text();
 
+        var all = "";
+        
         $("message", xml).each(function(id) {
             var message = $("message", xml).get(id);
-            var d = new Date(parseInt($("date", message).text()) * 1000);
+            var html = getHTMLFromMessage(message);
 
-            var hour = d.getHours();
-            if (hour < 10) hour = "0" + hour;
-
-            var min = d.getMinutes();
-            if (min < 10) min = "0" + min;
-
-
-            $("#shoutbox").prepend(
-
-            "<li><b title=\"" + d.toDateString() + "\">[" + hour + ":" + min + "]</b> <b>" + $("username", message).text() + "</b>: " + $("text", message).text() + "</li>");
+           
+            
+            if(append === true)
+            {
+            	all = html + all;
+            }
+            else
+            {
+            	$("#shoutbox").prepend(html);
+            }
+            
+            
         });
+        
+        if(append)
+        {
+            $("#shoutbox").append(all);
+        }
+        
 
         if (mobile) {
             myScroll.refresh();
@@ -48,14 +74,34 @@ function addMessages(xml) {
 }
 
 
-function updateShoutbox() {
+function addPage(pageNo)
+{
+	counter = pageNo;
+	
+	 $.get("extensions/shoutbox_pun/data.php", {
+	        m: "list",
+	        id: 0,
+	        page: pageNo
+	        
+	    }, function(xml)
+	    {
+
+	        addMessages(xml,true);
+
+	    });
+	
+}
+
+function updateShoutbox() 
+{
 
     $.get("extensions/shoutbox_pun/data.php", {
         m: "list",
         id: lastid
-    }, function(xml) {
+    }, function(xml)
+    {
 
-        addMessages(xml);
+        addMessages(xml,false);
 
     });
 
@@ -65,13 +111,15 @@ function updateShoutbox() {
  * This could be better but it works for now
  */
 
-function isMobile() {
+function isMobile() 
+{
     if (navigator.userAgent.match(/Android/i) || navigator.userAgent.match(/webOS/i) || navigator.userAgent.match(/iPhone/i) || navigator.userAgent.match(/iPod/i) || navigator.userAgent.match(/BlackBerry/)) {
 
         return true;
 
     }
-    else {
+    else 
+    {
         return false;
     }
 }
@@ -94,7 +142,7 @@ $(document).ready(function() {
             id: lastid
         }, function(xml) {
 
-            addMessages(xml);
+            addMessages(xml,false);
         });
 
         return false;
@@ -103,5 +151,17 @@ $(document).ready(function() {
     updateShoutbox();
 
     setTimeout("updateShoutbox()", waitTime);
+    
+    $('#sbox').endlessScroll({
+    	  fireOnce: true,
+    	  ceaseFire: function(p)
+    	  {
+    		  return counter > 5;
+    	  },
+    
+    	  callback: function(p){
+    	    addPage(p);
+    	  }
+    	});
 
 });
