@@ -20,7 +20,7 @@
 <extension engine="1.0">
     <id>shoutbox_pun</id>
     <title>PunBB Shoutbox</title>
-    <version>7.1.5</version>
+    <version>7.1.7</version>
     <description>Puts a shoutbox underneath the forum</description>
     <author>andrewmichaelsmith</author>
 
@@ -74,7 +74,7 @@
             {
 
                 $forum_loader->add_js($ext_info['url'] . '/js/iscroll.js');
-                $forum_loader->add_js($ext_info['url'] . '/js/jquery.endless-scroll.js'));
+                $forum_loader->add_js($ext_info['url'] . '/js/jquery.endless-scroll.js');
                 $forum_loader->add_js($ext_info['url'] . '/js/shoutbox-pun.js');
                 
                 if ($forum_user['style'] != 'Oxygen' && file_exists($ext_info['path'].'/style/'.$forum_user['style'].'/'.$ext_info['id'].'.css'))
