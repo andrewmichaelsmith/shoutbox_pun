@@ -5,3 +5,7 @@ shoutbox_box is a [PunBB](https://github.com/punbb/punbb) extension that will pl
 # Install
 
 Download [shoutbox_pun.zip](https://github.com/downloads/andrewmichaelsmith/shoutbox_pun/shoutbox_pun.zip) to your extensions directory and unzip (to ./extensions/shoutbox_pun) then install from 'Manage Extensions' in your PunBB forum administration page.
+
+# Screenshot
+
+<img src="https://github.com/downloads/andrewmichaelsmith/shoutbox_pun/screenshot.png" />
