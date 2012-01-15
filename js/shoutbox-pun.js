@@ -152,7 +152,7 @@ $(document).ready(function() {
 
         var sht = $("#shout").val();
         $("#shout").attr("value", "");
-        $.get("/extensions/shoutbox_pun/data.php", {
+        $.get("extensions/shoutbox_pun/data.php", {
             add: sht,
             id: lastid,
             csrf_token: $('input[name="csrf_token"]').val()

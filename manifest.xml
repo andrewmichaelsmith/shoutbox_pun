@@ -20,7 +20,7 @@
 <extension engine="1.0">
     <id>shoutbox_pun</id>
     <title>PunBB Shoutbox</title>
-    <version>7.1.7</version>
+    <version>7.1.8</version>
     <description>Puts a shoutbox underneath the forum</description>
     <author>andrewmichaelsmith</author>
 
@@ -88,7 +88,7 @@
 ?>
 <form id="shoutform">
     <input type="text" class="sbox" id="shout" color="white" size="100" maxlength="250">
-    <input type="hidden" name="csrf_token" value="<?=generate_form_token($ext_info['path'].'/data.php')?>" />
+    <input type="hidden" name="csrf_token" value="<?php echo generate_form_token($ext_info['path'].'/data.php'); ?>" />
     
     <img src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwoKCggAAAAAAAAAAAAAAACH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADGwi6MjRiSenIm9hqPOvljAOBZGmeaKqubOu6CQAh+QQJCgAAACwAAAAAEAAQAAADHAi63A5ikCEek2TalftWmPZFU/WdaKqubOu+bwIAIfkECQoAAAAsAAAAABAAEAAAAxwIutz+UIlBhoiKkorB/p3GYVN1dWiqrmzrvmkCACH5BAkKAAAALAAAAAAQABAAAAMbCLrc/jDKycQgQ8xL8OzgBg6ThWlUqq5s604JACH5BAkKAAAALAAAAAAQABAAAAMbCLrc/jDKSautYpAhpibbBI7eOEzZ1l1s6yoJACH5BAkKAAAALAAAAAAQABAAAAMaCLrc/jDKSau9OOspBhnC5BHfRJ7iOXAe2CQAIfkECQoAAAAsAAAAABAAEAAAAxoIutz+MMpJ6xSDDDEz0dMnduJwZZulrmzbJAAh+QQJCgAAACwAAAAAEAAQAAADGwi63P4wRjHIEBJUYjP/2dZJlIVlaKqubOuyCQAh+QQJCgAAACwAAAAAEAAQAAADHAi63A5ikCEek2TalftWmPZFU/WdaKqubOu+bwIAOwAAAAAAAAAAAA%3D%3D" alt="Loading..." id="loading" width="16" height="16"/>
     <span id="error"></span>
