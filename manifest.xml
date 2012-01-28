@@ -20,7 +20,7 @@
 <extension engine="1.0">
     <id>shoutbox_pun</id>
     <title>PunBB Shoutbox</title>
-    <version>8.0.0</version>
+    <version>8.0.2</version>
     <description>Puts a shoutbox underneath the forum</description>
     <author>andrewmichaelsmith</author>
 
@@ -85,9 +85,9 @@
         ]]></hook>
         
         <hook id="in_info_output_start"><![CDATA[
-?>
 if($forum_user['id']!=1) 
 {
+?>
 <form id="shoutform">
     <input type="text" class="sbox" id="shout" color="white" size="100" maxlength="250">
     <input type="hidden" name="csrf_token" value="<?php echo generate_form_token($ext_info['path'].'/data.php'); ?>" />

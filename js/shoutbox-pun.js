@@ -39,8 +39,17 @@ function getHTMLFromMessage(message)
 
 function addMessages(xml,append)
 {
-
-    if ($("newones", xml).text() !== "0") {
+	
+	if ($("iserror", xml).text() == "1")
+	{
+		$("#error").text(($("error", xml).text()))
+	}
+	else
+	{
+		$("#error").text("");
+	}
+	
+	if ($("newones", xml).text() !== "0") {
         lastid = $("lastid", xml).text();
 
         var all = "";
@@ -49,8 +58,6 @@ function addMessages(xml,append)
             var message = $("message", xml).get(id);
             var html = getHTMLFromMessage(message);
 
-           
-            
             if(append === true)
             {
             	all = html + all;
@@ -72,7 +79,7 @@ function addMessages(xml,append)
         if (mobile) {
             myScroll.refresh();
         }
-    }
+	}
 
     $("#loading").fadeOut();
 
