@@ -13,24 +13,17 @@
 */
 
 define("MAX_PAGES", 5);
-define('PUN_QUIET_VISIT', 1);
 
-/*
- * 
- * 
- * 
- * 
- * 
- * 
- */
 ob_start("ob_gzhandler");
 header("Cache-Control: no-cache");
 header("Content-type: text/xml");  
 define('FORUM_ROOT', '../../');
+
+define('FORUM_QUIET_VISIT', 1);
+
+
+
 require FORUM_ROOT.'include/common.php';
-
-
-
 if($forum_user['id']==1) 
 {
       print_error("You are not logged in");
