@@ -13,6 +13,7 @@
 */
 
 define("MAX_PAGES", 5);
+define('PUN_QUIET_VISIT', 1);
 
 /*
  * 
