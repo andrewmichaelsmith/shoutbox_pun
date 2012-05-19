@@ -21,7 +21,7 @@
     <id>shoutbox_pun</id>
     <title>PunBB Shoutbox</title>
     <version>8.0.3</version>
-    <description>Puts a shoutbox underneath the forum</description>
+    <description>Puts a shoutbox underneath the forum. Requires pun_jquery to be installed first.</description>
     <author>andrewmichaelsmith</author>
 
     <minversion>1.4.0</minversion>
