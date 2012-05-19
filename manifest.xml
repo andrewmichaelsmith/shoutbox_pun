@@ -20,18 +20,27 @@
 <extension engine="1.0">
     <id>shoutbox_pun</id>
     <title>PunBB Shoutbox</title>
-    <version>8.0.2</version>
-    <description>Puts a shoutbox underneath the forum</description>
+    <version>8.2.111111</version>
+    <description>Puts a shoutbox underneath the forum. Requires pun_jquery to be installed first.</description>
     <author>andrewmichaelsmith</author>
 
     <minversion>1.4.0</minversion>
-    <maxtestedon>1.4.1</maxtestedon>
+    <maxtestedon>1.4.2</maxtestedon>
     
     <dependencies>
         <dependency>pun_jquery</dependency>
     </dependencies>
   
+    <!-- set up options and  create table for the shoutbox shouts -->
     <install><![CDATA[
+        
+        forum_config_add('o_shoutbox_pun_guests_can_view', '0');
+        forum_config_add('o_shoutbox_pun_links_for_usernames', '0');
+        forum_config_add('o_shoutbox_pun_guests_can_post', '0');
+        forum_config_add('o_shoutbox_pun_show_below_all_pages', '0');
+        forum_config_add('o_shoutbox_pun_show_on_top', '0');
+
+
         if (!$forum_db->table_exists('shoutbox_pun')) {
             $schema = array(
                 'FIELDS'            => array(
@@ -61,13 +70,22 @@
                     
             $forum_db->create_table('shoutbox_pun', $schema);
         }  
+        
+		
     ]]></install>
     
     <uninstall><![CDATA[
+        forum_config_remove('o_shoutbox_pun_guests_can_view');
+        forum_config_remove('o_shoutbox_pun_links_for_usernames');
+        forum_config_remove('o_shoutbox_pun_guests_can_post');
+        forum_config_remove('o_shoutbox_pun_show_below_all_pages');
+        forum_config_remove('o_shoutbox_pun_show_on_top');
+        
         $forum_db->drop_table('shoutbox_pun');
     ]]></uninstall>
 
     
+    <!--  adds JS and CSS for the shoutbox to the header -->
     <hooks>
         <hook id="hd_head"><![CDATA[
             if (defined('FORUM_PAGE') && FORUM_PAGE == 'index')
@@ -84,12 +102,21 @@
             }
         ]]></hook>
         
+        <!--  adds shoutbox underneath forum -->
         <hook id="in_info_output_start"><![CDATA[
-if($forum_user['id']!=1) 
+if($forum_user['id']!=1 || $forum_config['o_shoutbox_pun_guests_can_view']==1) 
 {
+	if (!isset($lang_shoutbox_pun)) {
+		if (file_exists($ext_info['path'].'/lang/'.$forum_user['language'].'/lang.php')) {
+			require $ext_info['path'].'/lang/'.$forum_user['language'].'/lang.php';
+		} else {
+			require $ext_info['path'].'/lang/English/lang.php';
+		}
+	}
+
 ?>
 <form id="shoutform">
-    <input type="text" class="sbox" id="shout" color="white" size="100" maxlength="250">
+    <input type="text" class="sbox" id="shout" color="white" size="100" maxlength="250" <?php if($forum_user['id']==1 &&  $forum_config['o_shoutbox_pun_guests_can_post']==0) { echo 'disabled="disabled" value="'.$lang_shoutbox_pun['msg_guests_cant_post'].'"'; } ?>>
     <input type="hidden" name="csrf_token" value="<?php echo generate_form_token($ext_info['path'].'/data.php'); ?>" />
     
     <img src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwoKCggAAAAAAAAAAAAAAACH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADGwi6MjRiSenIm9hqPOvljAOBZGmeaKqubOu6CQAh+QQJCgAAACwAAAAAEAAQAAADHAi63A5ikCEek2TalftWmPZFU/WdaKqubOu+bwIAIfkECQoAAAAsAAAAABAAEAAAAxwIutz+UIlBhoiKkorB/p3GYVN1dWiqrmzrvmkCACH5BAkKAAAALAAAAAAQABAAAAMbCLrc/jDKycQgQ8xL8OzgBg6ThWlUqq5s604JACH5BAkKAAAALAAAAAAQABAAAAMbCLrc/jDKSautYpAhpibbBI7eOEzZ1l1s6yoJACH5BAkKAAAALAAAAAAQABAAAAMaCLrc/jDKSau9OOspBhnC5BHfRJ7iOXAe2CQAIfkECQoAAAAsAAAAABAAEAAAAxoIutz+MMpJ6xSDDDEz0dMnduJwZZulrmzbJAAh+QQJCgAAACwAAAAAEAAQAAADGwi63P4wRjHIEBJUYjP/2dZJlIVlaKqubOuyCQAh+QQJCgAAACwAAAAAEAAQAAADHAi63A5ikCEek2TalftWmPZFU/WdaKqubOu+bwIAOwAAAAAAAAAAAA%3D%3D" alt="Loading..." id="loading" width="16" height="16"/>
@@ -101,5 +128,164 @@ if($forum_user['id']!=1)
 <?php
 }
         ]]></hook>
+        	<hook id="aop_features_validation"><![CDATA[
+			$form['shoutbox_pun_guests_can_view'] = (!isset($form['shoutbox_pun_guests_can_view']) || (int) $form['shoutbox_pun_guests_can_view'] <= 0) ? '0' : '1';
+			$form['shoutbox_pun_links_for_usernames'] = (!isset($form['shoutbox_pun_links_for_usernames']) || (int) $form['shoutbox_pun_links_for_usernames'] <= 0) ? '0' : '1';
+            $form['shoutbox_pun_guests_can_post'] = (!isset($form['shoutbox_pun_guests_can_post']) || (int) $form['shoutbox_pun_guests_can_post'] <= 0) ? '0' : '1';
+          $form['shoutbox_pun_show_below_all_pages'] = (!isset($form['shoutbox_pun_show_below_all_pages']) || (int) $form['shoutbox_pun_show_below_all_pages'] <= 0) ? '0' : '1';
+          $form['shoutbox_pun_show_on_top'] = (!isset($form['shoutbox_pun_show_on_top']) || (int) $form['shoutbox_pun_show_on_top'] <= 0) ? '0' : '1';
+          
+
+
+
+
+		]]></hook>
+		
+        	
+        <!--  based upon https://github.com/dimkalinux/Fancy-Extensions/blob/master/fancy_addthis/manifest.xml -->
+        <!--  add configuration options to page -->
+        <hook id="aop_features_gzip_fieldset_end"><![CDATA[
+         	if (!isset($lang_shoutbox_pun)) {
+				if (file_exists($ext_info['path'].'/lang/'.$forum_user['language'].'/lang.php')) {
+					require $ext_info['path'].'/lang/'.$forum_user['language'].'/lang.php';
+				} else {
+					require $ext_info['path'].'/lang/English/lang.php';
+				}
+			}
+			
+			$forum_page['group_count'] = $forum_page['item_count'] = 0;
+			
+			?>
+			
+			<div class="content-head" id="<?php echo $ext_info['id'].'_settings'; ?>">
+					<h2 class="hn"><span><?php echo $lang_shoutbox_pun['setup_shoutboxpun_title'] ?></span></h2>
+				</div>
+				<fieldset class="frm-group group<?php echo ++$forum_page['group_count'] ?>">
+					<legend class="group-legend"><span><?php echo $lang_shoutbox_pun['setup_shoutboxpun_title'] ?></span></legend>
+
+                    <!-- opt start -->
+					<fieldset class="mf-set set<?php echo ++$forum_page['item_count'] ?>">
+						
+						<legend><span><?php echo $lang_shoutbox_pun['shoutbox_pun_guests_can_view'] ?></span></legend>
+						<div class="mf-box">
+							<div class="mf-item">
+								<span class="fld-input">
+									<input type="checkbox"
+										id="fld<?php echo ++$forum_page['fld_count'] ?>"
+										name="form[shoutbox_pun_guests_can_view]" value="1"
+										<?php if ($forum_config['o_shoutbox_pun_guests_can_view'] == '1') echo ' checked="checked"'; ?> />
+								</span>
+								<label for="fld<?php echo $forum_page['fld_count'] ?>">
+									<?php echo $lang_shoutbox_pun['shoutbox_pun_guests_can_view_desc'] ?>
+								</label>
+							</div>
+
+				
+					</fieldset>
+                    <!-- opt end -->
+
+
+
+
+<fieldset class="mf-set set<?php echo ++$forum_page['item_count'] ?>">
+    
+    <legend><span><?php echo $lang_shoutbox_pun['shoutbox_pun_guests_can_post'] ?></span></legend>
+    <div class="mf-box">
+        <div class="mf-item">
+            <span class="fld-input">
+                <input type="checkbox"
+                    id="fld<?php echo ++$forum_page['fld_count'] ?>"
+                    name="form[shoutbox_pun_guests_can_post]" value="1"
+                    <?php if ($forum_config['o_shoutbox_pun_guests_can_post'] == '1') echo ' checked="checked"'; ?> />
+            </span>
+            <label for="fld<?php echo $forum_page['fld_count'] ?>">
+                <?php echo $lang_shoutbox_pun['shoutbox_pun_guests_can_post_desc'] ?>
+            </label>
+        </div>
+
+
+</fieldset>
+
+
+<!-- these options have not been implemented yet so we hide them 
+
+<fieldset class="mf-set set<?php echo ++$forum_page['item_count'] ?>">
+    
+    <legend><span><?php echo $lang_shoutbox_pun['shoutbox_pun_links_for_usernames'] ?></span></legend>
+    <div class="mf-box">
+        <div class="mf-item">
+            <span class="fld-input">
+                <input type="checkbox"
+                    id="fld<?php echo ++$forum_page['fld_count'] ?>"
+                    name="form[shoutbox_pun_links_for_usernames]" value="1"
+                    <?php if ($forum_config['o_shoutbox_pun_links_for_usernames'] == '1') echo ' checked="checked"'; ?> />
+            </span>
+            <label for="fld<?php echo $forum_page['fld_count'] ?>">
+                <?php echo $lang_shoutbox_pun['shoutbox_pun_links_for_usernames_desc'] ?>
+            </label>
+        </div>
+
+
+</fieldset>
+
+
+
+
+
+
+
+<fieldset class="mf-set set<?php echo ++$forum_page['item_count'] ?>">
+    
+    <legend><span><?php echo $lang_shoutbox_pun['shoutbox_pun_show_below_all_pages'] ?></span></legend>
+    <div class="mf-box">
+        <div class="mf-item">
+            <span class="fld-input">
+                <input type="checkbox"
+                    id="fld<?php echo ++$forum_page['fld_count'] ?>"
+                    name="form[shoutbox_pun_show_below_all_pages]" value="1"
+                    <?php if ($forum_config['o_shoutbox_pun_show_below_all_pages'] == '1') echo ' checked="checked"'; ?> />
+            </span>
+            <label for="fld<?php echo $forum_page['fld_count'] ?>">
+                <?php echo $lang_shoutbox_pun['shoutbox_pun_show_below_all_pages_desc'] ?>
+            </label>
+        </div>
+
+
+</fieldset>
+
+
+
+
+<fieldset class="mf-set set<?php echo ++$forum_page['item_count'] ?>">
+    
+    <legend><span><?php echo $lang_shoutbox_pun['shoutbox_pun_show_on_top'] ?></span></legend>
+    <div class="mf-box">
+        <div class="mf-item">
+            <span class="fld-input">
+                <input type="checkbox"
+                    id="fld<?php echo ++$forum_page['fld_count'] ?>"
+                    name="form[shoutbox_pun_show_on_top]" value="1"
+                    <?php if ($forum_config['o_shoutbox_pun_show_on_top'] == '1') echo ' checked="checked"'; ?> />
+            </span>
+            <label for="fld<?php echo $forum_page['fld_count'] ?>">
+                <?php echo $lang_shoutbox_pun['shoutbox_pun_show_on_top_desc'] ?>
+            </label>
+        </div>
+
+
+</fieldset>
+
+
+-->
+				</fieldset>
+				
+			
+				
+					
+			</fieldset>
+		
+			
+			<?php
+            ]]></hook>
     </hooks>
 </extension>
