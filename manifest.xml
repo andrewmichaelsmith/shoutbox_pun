@@ -20,7 +20,7 @@
 <extension engine="1.0">
     <id>shoutbox_pun</id>
     <title>PunBB Shoutbox</title>
-    <version>8.0.2</version>
+    <version>8.0.3</version>
     <description>Puts a shoutbox underneath the forum</description>
     <author>andrewmichaelsmith</author>
 
@@ -31,6 +31,7 @@
         <dependency>pun_jquery</dependency>
     </dependencies>
   
+    <!--  creates table for the shoutbox shouts -->
     <install><![CDATA[
         if (!$forum_db->table_exists('shoutbox_pun')) {
             $schema = array(
@@ -68,6 +69,7 @@
     ]]></uninstall>
 
     
+    <!--  adds JS and CSS for the shoutbox to the header -->
     <hooks>
         <hook id="hd_head"><![CDATA[
             if (defined('FORUM_PAGE') && FORUM_PAGE == 'index')
@@ -84,6 +86,7 @@
             }
         ]]></hook>
         
+        <!--  adds shoutbox underneath forum -->
         <hook id="in_info_output_start"><![CDATA[
 if($forum_user['id']!=1) 
 {
