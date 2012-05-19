@@ -24,20 +24,16 @@ define('FORUM_QUIET_VISIT', 1);
 
 
 require FORUM_ROOT.'include/common.php';
-if($forum_user['id']==1) 
-{
-      print_error("You are not logged in");
-}
-else if($_GET['csrf_token'] != generate_form_token('./extensions/shoutbox_pun/data.php'))
+if($_GET['csrf_token'] != generate_form_token('./extensions/shoutbox_pun/data.php'))
 {
 	print_error("Invalid CSRF Token");
 }
-else if($_GET['add'])
+else if($_GET['add'] && ($forum_user['id']!=1 || $forum_config['o_shoutbox_pun_guests_can_post']==1))
 {
 	
 	
 	
-	$msg_to_add = make_clickable($_GET['add']);
+   $msg_to_add = make_clickable($_GET['add']);
 	
 	
   $msg_to_add = xmlentities(htmlspecialchars($msg_to_add,ENT_QUOTES,'UTF-8'));
@@ -64,7 +60,7 @@ else if($_GET['add'])
 	
 	  
 }
-else if($_GET['m']=="list")
+else if($_GET['m']=="list" &&  ($forum_user['id']!=1 || $forum_config['o_shoutbox_pun_guests_can_view']==1))
 {
 	$page = 0;
 	

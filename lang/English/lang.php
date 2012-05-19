@@ -30,8 +30,10 @@ $lang_shoutbox_pun = array(
 	'shoutbox_pun_show_below_all_pages_desc'		=> 'Displays the shoutbox on every page (rather than just the main page)',
 	
 	'shoutbox_pun_show_on_top'		=> 'Show shoutbox at top',
-	'shoutbox_pun_show_on_top_desc'		=> 'Put the shoutbox at the top of the forum, instead of at the bottom'
+	'shoutbox_pun_show_on_top_desc'		=> 'Put the shoutbox at the top of the forum, instead of at the bottom',
 	
+	
+	'msg_guests_cant_post' => 'Guest posting to the shoutbox is disabled'
 	
 	
 );
