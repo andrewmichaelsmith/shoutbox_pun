@@ -78,7 +78,7 @@ else if($_GET['m']=="list" &&  ($forum_user['id']!=1 || $forum_config['o_shoutbo
 }
 else
 {
-	print_error("You didn't tell me what to do"); 	
+	print_error("Action either not authorised or not recognised"); 	
 }
 function _make_url_clickable_cb($matches) {
 	$ret = '';
