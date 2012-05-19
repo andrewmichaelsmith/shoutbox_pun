@@ -25,7 +25,7 @@
     <author>andrewmichaelsmith</author>
 
     <minversion>1.4.0</minversion>
-    <maxtestedon>1.4.1</maxtestedon>
+    <maxtestedon>1.4.2</maxtestedon>
     
     <dependencies>
         <dependency>pun_jquery</dependency>
