@@ -31,8 +31,17 @@
         <dependency>pun_jquery</dependency>
     </dependencies>
   
-    <!--  creates table for the shoutbox shouts -->
+    <!-- set up options and  create table for the shoutbox shouts -->
     <install><![CDATA[
+        
+        forum_config_add('o_shoutbox_pun_links_for_usernames', '0');
+        forum_config_add('o_shoutbox_pun_show_to_guests', '0');
+        forum_config_add('o_shoutbox_pun_guests_can_view', '0');
+        forum_config_add('o_shoutbox_pun_guests_can_post', '0');
+        forum_config_add('o_shoutbox_pun_show_below_all_pages', '0');
+        forum_config_add('o_shoutbox_pun_show_on_top', '0');
+
+
         if (!$forum_db->table_exists('shoutbox_pun')) {
             $schema = array(
                 'FIELDS'            => array(
@@ -62,9 +71,22 @@
                     
             $forum_db->create_table('shoutbox_pun', $schema);
         }  
+        
+		
     ]]></install>
     
     <uninstall><![CDATA[
+        forum_config_remove('o_shoutbox_pun_links_for_usernames');
+        forum_config_remove('o_shoutbox_pun_show_to_guests');
+        forum_config_remove('o_shoutbox_pun_guests_can_view');
+        forum_config_remove('o_shoutbox_pun_guests_can_post');
+        forum_config_remove('o_shoutbox_pun_show_below_all_pages');
+        forum_config_remove('o_shoutbox_pun_show_on_top');
+        forum_config_remove('o_pun_jquery_include_method');
+        forum_config_remove('o_pun_jquery_include_method');
+        forum_config_remove('o_pun_jquery_include_method');
+        forum_config_remove('o_pun_jquery_include_method');
+        
         $forum_db->drop_table('shoutbox_pun');
     ]]></uninstall>
 
@@ -104,5 +126,9 @@ if($forum_user['id']!=1)
 <?php
 }
         ]]></hook>
+        
+        <!--  add configuration options to page -->
+        <hook id="aop_features_gzip_fieldset_end"><![CDATA[
+            ]]></hook>
     </hooks>
 </extension>
