@@ -20,7 +20,7 @@
 <extension engine="1.0">
     <id>shoutbox_pun</id>
     <title>PunBB Shoutbox</title>
-    <version>8.2.111111</version>
+    <version>8.3</version>
     <description>Puts a shoutbox underneath the forum. Requires pun_jquery to be installed first.</description>
     <author>andrewmichaelsmith</author>
 
@@ -103,29 +103,64 @@
         ]]></hook>
         
         <!--  adds shoutbox underneath forum -->
-        <hook id="in_info_output_start"><![CDATA[
-if($forum_user['id']!=1 || $forum_config['o_shoutbox_pun_guests_can_view']==1) 
-{
-	if (!isset($lang_shoutbox_pun)) {
-		if (file_exists($ext_info['path'].'/lang/'.$forum_user['language'].'/lang.php')) {
-			require $ext_info['path'].'/lang/'.$forum_user['language'].'/lang.php';
-		} else {
-			require $ext_info['path'].'/lang/English/lang.php';
-		}
-	}
 
-?>
-<form id="shoutform">
-    <input type="text" class="sbox" id="shout" color="white" size="100" maxlength="250" <?php if($forum_user['id']==1 &&  $forum_config['o_shoutbox_pun_guests_can_post']==0) { echo 'disabled="disabled" value="'.$lang_shoutbox_pun['msg_guests_cant_post'].'"'; } ?>>
-    <input type="hidden" name="csrf_token" value="<?php echo generate_form_token($ext_info['path'].'/data.php'); ?>" />
-    
-    <img src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwoKCggAAAAAAAAAAAAAAACH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADGwi6MjRiSenIm9hqPOvljAOBZGmeaKqubOu6CQAh+QQJCgAAACwAAAAAEAAQAAADHAi63A5ikCEek2TalftWmPZFU/WdaKqubOu+bwIAIfkECQoAAAAsAAAAABAAEAAAAxwIutz+UIlBhoiKkorB/p3GYVN1dWiqrmzrvmkCACH5BAkKAAAALAAAAAAQABAAAAMbCLrc/jDKycQgQ8xL8OzgBg6ThWlUqq5s604JACH5BAkKAAAALAAAAAAQABAAAAMbCLrc/jDKSautYpAhpibbBI7eOEzZ1l1s6yoJACH5BAkKAAAALAAAAAAQABAAAAMaCLrc/jDKSau9OOspBhnC5BHfRJ7iOXAe2CQAIfkECQoAAAAsAAAAABAAEAAAAxoIutz+MMpJ6xSDDDEz0dMnduJwZZulrmzbJAAh+QQJCgAAACwAAAAAEAAQAAADGwi63P4wRjHIEBJUYjP/2dZJlIVlaKqubOuyCQAh+QQJCgAAACwAAAAAEAAQAAADHAi63A5ikCEek2TalftWmPZFU/WdaKqubOu+bwIAOwAAAAAAAAAAAA%3D%3D" alt="Loading..." id="loading" width="16" height="16"/>
-    <span id="error"></span>
-    <div class="sbox" id="sbox">
-        <div id="shoutbox"></div>
-    </div>
-</form>
-<?php
+        <hook id="in_main_output_start"><![CDATA[
+            
+if($forum_config['o_shoutbox_pun_show_on_top']==1)
+{
+	if($forum_user['id']!=1 || $forum_config['o_shoutbox_pun_guests_can_view']==1) 
+	{
+		if (!isset($lang_shoutbox_pun)) {
+			if (file_exists($ext_info['path'].'/lang/'.$forum_user['language'].'/lang.php')) {
+				require $ext_info['path'].'/lang/'.$forum_user['language'].'/lang.php';
+			} else {
+				require $ext_info['path'].'/lang/English/lang.php';
+			}
+		}
+	
+	?>
+	<form id="shoutform">
+	    <input type="text" class="sbox" id="shout" color="white" size="100" maxlength="250" <?php if($forum_user['id']==1 &&  $forum_config['o_shoutbox_pun_guests_can_post']==0) { echo 'disabled="disabled" value="'.$lang_shoutbox_pun['msg_guests_cant_post'].'"'; } ?>>
+	    <input type="hidden" name="csrf_token" value="<?php echo generate_form_token($ext_info['path'].'/data.php'); ?>" />
+	    
+	    <img src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwoKCggAAAAAAAAAAAAAAACH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADGwi6MjRiSenIm9hqPOvljAOBZGmeaKqubOu6CQAh+QQJCgAAACwAAAAAEAAQAAADHAi63A5ikCEek2TalftWmPZFU/WdaKqubOu+bwIAIfkECQoAAAAsAAAAABAAEAAAAxwIutz+UIlBhoiKkorB/p3GYVN1dWiqrmzrvmkCACH5BAkKAAAALAAAAAAQABAAAAMbCLrc/jDKycQgQ8xL8OzgBg6ThWlUqq5s604JACH5BAkKAAAALAAAAAAQABAAAAMbCLrc/jDKSautYpAhpibbBI7eOEzZ1l1s6yoJACH5BAkKAAAALAAAAAAQABAAAAMaCLrc/jDKSau9OOspBhnC5BHfRJ7iOXAe2CQAIfkECQoAAAAsAAAAABAAEAAAAxoIutz+MMpJ6xSDDDEz0dMnduJwZZulrmzbJAAh+QQJCgAAACwAAAAAEAAQAAADGwi63P4wRjHIEBJUYjP/2dZJlIVlaKqubOuyCQAh+QQJCgAAACwAAAAAEAAQAAADHAi63A5ikCEek2TalftWmPZFU/WdaKqubOu+bwIAOwAAAAAAAAAAAA%3D%3D" alt="Loading..." id="loading" width="16" height="16"/>
+	    <span id="error"></span>
+	    <div class="sbox" id="sbox">
+	        <div id="shoutbox"></div>
+	    </div>
+	</form>
+	<p/>
+	<?php
+	}
+}
+        ]]></hook>        
+        <hook id="in_info_output_start"><![CDATA[
+            
+if($forum_config['o_shoutbox_pun_show_on_top']!=1)
+{
+	if($forum_user['id']!=1 || $forum_config['o_shoutbox_pun_guests_can_view']==1) 
+	{
+		if (!isset($lang_shoutbox_pun)) {
+			if (file_exists($ext_info['path'].'/lang/'.$forum_user['language'].'/lang.php')) {
+				require $ext_info['path'].'/lang/'.$forum_user['language'].'/lang.php';
+			} else {
+				require $ext_info['path'].'/lang/English/lang.php';
+			}
+		}
+	
+	?>
+	<form id="shoutform">
+	    <input type="text" class="sbox" id="shout" color="white" size="100" maxlength="250" <?php if($forum_user['id']==1 &&  $forum_config['o_shoutbox_pun_guests_can_post']==0) { echo 'disabled="disabled" value="'.$lang_shoutbox_pun['msg_guests_cant_post'].'"'; } ?>>
+	    <input type="hidden" name="csrf_token" value="<?php echo generate_form_token($ext_info['path'].'/data.php'); ?>" />
+	    
+	    <img src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwoKCggAAAAAAAAAAAAAAACH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADGwi6MjRiSenIm9hqPOvljAOBZGmeaKqubOu6CQAh+QQJCgAAACwAAAAAEAAQAAADHAi63A5ikCEek2TalftWmPZFU/WdaKqubOu+bwIAIfkECQoAAAAsAAAAABAAEAAAAxwIutz+UIlBhoiKkorB/p3GYVN1dWiqrmzrvmkCACH5BAkKAAAALAAAAAAQABAAAAMbCLrc/jDKycQgQ8xL8OzgBg6ThWlUqq5s604JACH5BAkKAAAALAAAAAAQABAAAAMbCLrc/jDKSautYpAhpibbBI7eOEzZ1l1s6yoJACH5BAkKAAAALAAAAAAQABAAAAMaCLrc/jDKSau9OOspBhnC5BHfRJ7iOXAe2CQAIfkECQoAAAAsAAAAABAAEAAAAxoIutz+MMpJ6xSDDDEz0dMnduJwZZulrmzbJAAh+QQJCgAAACwAAAAAEAAQAAADGwi63P4wRjHIEBJUYjP/2dZJlIVlaKqubOuyCQAh+QQJCgAAACwAAAAAEAAQAAADHAi63A5ikCEek2TalftWmPZFU/WdaKqubOu+bwIAOwAAAAAAAAAAAA%3D%3D" alt="Loading..." id="loading" width="16" height="16"/>
+	    <span id="error"></span>
+	    <div class="sbox" id="sbox">
+	        <div id="shoutbox"></div>
+	    </div>
+	</form>
+	<?php
+	}
 }
         ]]></hook>
         	<hook id="aop_features_validation"><![CDATA[
@@ -206,6 +241,26 @@ if($forum_user['id']!=1 || $forum_config['o_shoutbox_pun_guests_can_view']==1)
 
 </fieldset>
 
+<fieldset class="mf-set set<?php echo ++$forum_page['item_count'] ?>">
+    
+    <legend><span><?php echo $lang_shoutbox_pun['shoutbox_pun_show_on_top'] ?></span></legend>
+    <div class="mf-box">
+        <div class="mf-item">
+            <span class="fld-input">
+                <input type="checkbox"
+                    id="fld<?php echo ++$forum_page['fld_count'] ?>"
+                    name="form[shoutbox_pun_show_on_top]" value="1"
+                    <?php if ($forum_config['o_shoutbox_pun_show_on_top'] == '1') echo ' checked="checked"'; ?> />
+            </span>
+            <label for="fld<?php echo $forum_page['fld_count'] ?>">
+                <?php echo $lang_shoutbox_pun['shoutbox_pun_show_on_top_desc'] ?>
+            </label>
+        </div>
+
+
+</fieldset>
+
+
 
 <!-- these options have not been implemented yet so we hide them 
 
@@ -254,29 +309,9 @@ if($forum_user['id']!=1 || $forum_config['o_shoutbox_pun_guests_can_view']==1)
 </fieldset>
 
 
-
-
-<fieldset class="mf-set set<?php echo ++$forum_page['item_count'] ?>">
-    
-    <legend><span><?php echo $lang_shoutbox_pun['shoutbox_pun_show_on_top'] ?></span></legend>
-    <div class="mf-box">
-        <div class="mf-item">
-            <span class="fld-input">
-                <input type="checkbox"
-                    id="fld<?php echo ++$forum_page['fld_count'] ?>"
-                    name="form[shoutbox_pun_show_on_top]" value="1"
-                    <?php if ($forum_config['o_shoutbox_pun_show_on_top'] == '1') echo ' checked="checked"'; ?> />
-            </span>
-            <label for="fld<?php echo $forum_page['fld_count'] ?>">
-                <?php echo $lang_shoutbox_pun['shoutbox_pun_show_on_top_desc'] ?>
-            </label>
-        </div>
-
-
-</fieldset>
-
-
 -->
+
+
 				</fieldset>
 				
 			
