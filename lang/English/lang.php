@@ -24,7 +24,7 @@ $lang_shoutbox_pun = array(
 	'shoutbox_pun_guests_can_view_desc'		=> 'Allow guests to see the shoutbox',
 	
 	'shoutbox_pun_guests_can_post'		=> 'Allow guests to post',
-	'shoutbox_pun_guests_can_post_desc'		=> 'Allow guests to post to the shoutbox (not reccomended)',
+	'shoutbox_pun_guests_can_post_desc'		=> 'Allow guests to post to the shoutbox (not recommended)',
 	
 	'shoutbox_pun_show_below_all_pages'		=> 'Show shoutbox on all pages',
 	'shoutbox_pun_show_below_all_pages_desc'		=> 'Displays the shoutbox on every page (rather than just the main page)',
