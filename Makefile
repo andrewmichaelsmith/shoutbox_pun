@@ -1,3 +1,3 @@
 all:
-	zip -r shoutbox_pun.zip . -x '*.git/*' -x Makefile
+	zip -r bin/shoutbox_pun.zip . -x '*.git/*' -x Makefile -x bin/*
 
