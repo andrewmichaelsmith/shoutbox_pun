@@ -20,7 +20,7 @@
 <extension engine="1.0">
     <id>shoutbox_pun</id>
     <title>PunBB Shoutbox</title>
-    <version>8.3</version>
+    <version>9</version>
     <description>Puts a shoutbox underneath the forum. Requires pun_jquery to be installed first.</description>
     <author>andrewmichaelsmith</author>
 
