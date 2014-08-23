@@ -37,16 +37,13 @@ function getHTMLFromMessage(message)
      
 }
 
-function addMessages(xml,append)
+function addMessages(xml,append,sht)
 {
 	
 	if ($("iserror", xml).text() == "1")
 	{
 		$("#error").text(($("error", xml).text()))
-	}
-	else
-	{
-		$("#error").text("");
+        $("#shout").attr("value", sht);
 	}
 	
 	if ($("newones", xml).text() !== "0") {
@@ -152,7 +149,7 @@ $(document).ready(function() {
 
     $("form#shoutform").submit(function() {
 
-
+        $("#error").text("");
         $("#loading").fadeIn();
 
         clearTimeout(timeout);
@@ -165,7 +162,7 @@ $(document).ready(function() {
             csrf_token: $('input[name="csrf_token"]').val()
         }, function(xml) {
 
-            addMessages(xml,false);
+            addMessages(xml,false,sht);
         });
 
         return false;
