@@ -91,7 +91,7 @@ function _make_url_clickable_cb($matches) {
 		$ret = substr($url, -1);
 		$url = substr($url, 0, strlen($url)-1);
 	}
-	return $matches[1] . "<a href=\"".htmlspecialchars($url)."\" rel=\"nofollow\">".htmlspecialchars($url)."</a>" . $ret;
+	return $matches[1] . "<a target=\"_blank\" href=\"".htmlspecialchars($url)."\" rel=\"nofollow\">".htmlspecialchars($url)."</a>" . $ret;
 }
 
  
