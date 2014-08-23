@@ -193,6 +193,7 @@ function getShouts($id,$forum_db,$xml,$page) {
 
 function process_msg($msg) {
 
+    $msg = htmlspecialchars($msg);
     $msg = make_clickable($msg);
     $msg = xmlentities(htmlspecialchars($msg, ENT_QUOTES,'UTF-8'));
 
