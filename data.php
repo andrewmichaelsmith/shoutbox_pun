@@ -30,13 +30,9 @@ if($_GET['csrf_token'] != generate_form_token('./extensions/shoutbox_pun/data.ph
 }
 else if($_GET['add'] && ($forum_user['id']!=1 || $forum_config['o_shoutbox_pun_guests_can_post']==1))
 {
-	
-	
-	
-   $msg_to_add = make_clickable($_GET['add']);
-	
-	
-  $msg_to_add = xmlentities(htmlspecialchars($msg_to_add,ENT_QUOTES,'UTF-8'));
+
+
+  $msg_to_add = $_GET['add'];
   
   if( (strlen($msg_to_add) > 0) && (strlen($msg_to_add) <= 255) )
   {	
@@ -58,7 +54,6 @@ else if($_GET['add'] && ($forum_user['id']!=1 || $forum_config['o_shoutbox_pun_g
 	  
 	}
 	
-	  
 }
 else if($_GET['m']=="list" &&  ($forum_user['id']!=1 || $forum_config['o_shoutbox_pun_guests_can_view']==1))
 {
@@ -185,7 +180,7 @@ function getShouts($id,$forum_db,$xml,$page) {
 		echo "</date>\n";
 		 
 		echo "\t\t<text>";
-		echo $shout['shout'];
+		echo process_msg($shout['shout']);
 		echo "</text>\n";
 
 		echo "\t</message>\n";
@@ -193,6 +188,15 @@ function getShouts($id,$forum_db,$xml,$page) {
 	 
 	echo "<blah>".$ext_info['path']."</blah>";
 	echo "</response>";
+
+}
+
+function process_msg($msg) {
+
+    $msg = make_clickable($msg);
+    $msg = xmlentities(htmlspecialchars($msg, ENT_QUOTES,'UTF-8'));
+
+    return $msg;
 
 }
 
