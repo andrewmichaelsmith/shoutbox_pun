@@ -14,7 +14,6 @@
 
 define("MAX_PAGES", 5);
 
-ob_start("ob_gzhandler");
 header("Cache-Control: no-cache");
 header("Content-type: text/xml");  
 define('FORUM_ROOT', '../../');
